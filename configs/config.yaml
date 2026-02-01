@@ -1,0 +1,29 @@
+# HALB config
+
+server:
+    port: 8000
+    timeout: 30s
+
+services:
+    # auth service
+    auth:
+        host: auth.localhost
+        # optional strategy. defaults to round_robin
+        strategy: round_robin
+        servers:
+            - http://localhost:9000
+            - http://localhost:9001
+        # active health checks
+        health:
+            path: /health
+            interval: 2s
+
+    # billing service with least connections (slow server)
+    billing:
+        host: billing.localhost
+        strategy: least_conn
+        servers:
+            - http://localhost:9000
+        health:
+        path: /health
+        interval: 5s
