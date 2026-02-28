@@ -1,0 +1,41 @@
+version: 2
+
+project_name: halb
+
+builds:
+    - id: halb
+      env:
+          - CGO_ENABLED=0
+      main: ./cmd/main.go
+      goos:
+          - linux
+          - darwin
+          - windows
+      goarch:
+          - amd64
+          - arm64
+      goamd64:
+          - v1
+      flags:
+          - -ldflags=-s -w
+      binary: halb
+
+archives:
+    - id: default
+      format: tar.gz
+      format_overrides:
+          - goos: windows
+            format: zip
+      files:
+          - configs/config.yaml
+
+checksum:
+    name_template: "checksums.txt"
+
+changelog:
+    sort: asc
+    filters:
+        exclude:
+            - "^docs:"
+            - "^test:"
+            - "^chore:"

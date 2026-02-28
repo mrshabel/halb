@@ -25,5 +25,5 @@ services:
         servers:
             - http://localhost:9000
         health:
-        path: /health
-        interval: 5s
+            path: /health
+            interval: 5s

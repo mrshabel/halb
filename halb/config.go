@@ -127,7 +127,7 @@ func (c *Config) validate() error {
 
 		for _, s := range service.Servers {
 			// parse request url with http scheme
-			u, err := url.ParseRequestURI(s)
+			u, err := url.Parse(s)
 			if err != nil || (u.Scheme != "http" && u.Scheme != "https") {
 				return fmt.Errorf("service %q: invalid server url %q", name, s)
 			}

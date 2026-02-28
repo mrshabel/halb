@@ -1,0 +1,14 @@
+server:
+    port: 8000
+    timeout: 30s
+
+services:
+    backend:
+        host: backend.localhost
+        strategy: round_robin
+        servers:
+            - http://backend-1:80
+            - http://backend-2:80
+        health:
+            path: /status/200
+            interval: 5s

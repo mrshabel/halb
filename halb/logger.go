@@ -19,9 +19,11 @@ func NewLogger(debug bool) *Logger {
 		Level: level,
 	}
 
-	handler := slog.NewJSONHandler(os.Stdout, opts)
+	var handler slog.Handler
 	if debug {
-		handler = (*slog.JSONHandler)(slog.NewTextHandler(os.Stdout, opts))
+		handler = slog.NewTextHandler(os.Stdout, opts)
+	} else {
+		handler = slog.NewJSONHandler(os.Stdout, opts)
 	}
 
 	logger := slog.New(handler)

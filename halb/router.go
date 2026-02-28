@@ -106,8 +106,8 @@ func (r *Router) Reload(cfg *Config) error {
 					if ip := getClientIP(r); ip != "" {
 						r.Header.Set("X-Forwarded-For", ip)
 					}
-					r.Header.Set("X-Forwarded-Proto", "http")
-					r.Header.Set("X-Forwarded-Host", backendURL.Host)
+					r.Header.Set("X-Forwarded-Proto", backendURL.Scheme)
+					r.Header.Set("X-Forwarded-Host", r.Host)
 				},
 
 				ErrorHandler: func(w http.ResponseWriter, r *http.Request, err error) {

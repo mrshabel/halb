@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -67,7 +68,7 @@ func (w *Worker) run(ctx context.Context) {
 
 func (w *Worker) ping(ctx context.Context) {
 	// compose request
-	url := w.backend.URL.String() + w.healthCfg.Path
+	url := strings.TrimRight(w.backend.URL.String(), "/") + w.healthCfg.Path
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		w.trackFailure()

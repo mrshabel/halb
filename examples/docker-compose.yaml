@@ -1,0 +1,46 @@
+services:
+  halb:
+    image: mrshabel/halb:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - DEBUG=false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - halb-network
+
+  backend-1:
+    image: kennethreitz/httpbin
+    ports:
+      - "9001:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/status/200"]
+      interval: 5s
+      timeout: 3s
+      retries: 2
+    networks:
+      - halb-network
+
+  backend-2:
+    image: kennethreitz/httpbin
+    ports:
+      - "9002:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/status/200"]
+      interval: 5s
+      timeout: 3s
+      retries: 2
+    networks:
+      - halb-network
+
+networks:
+  halb-network:
+    driver: bridge
