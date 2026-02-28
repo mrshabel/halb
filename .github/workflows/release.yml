@@ -39,3 +39,23 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            mrshabel/halb:${{ github.ref_name }}
+            mrshabel/halb:latest
+          labels: |
+            org.opencontainers.image.title=halb
+            org.opencontainers.image.description=HALB - Highly Available Layer 7 Load Balancer
+            org.opencontainers.image.version=${{ github.ref_name }}
+            org.opencontainers.image.url=https://github.com/mrshabel/halb
+            org.opencontainers.image.source=https://github.com/mrshabel/halb
+            org.opencontainers.image.licenses=MIT
