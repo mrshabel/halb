@@ -34,22 +34,23 @@ install() {
     fi
 
     VERSION=$(curl -s "https://api.github.com/repos/${REPO}/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    VERSION=${VERSION#v}  # Remove 'v' prefix if present
 
     if [ -z "$VERSION" ]; then
         echo "Could not fetch latest release version"
         exit 1
     fi
 
-    echo "Installing HALB ${VERSION} for ${OS}/${ARCH}..."
+    echo "Installing HALB v${VERSION} for ${OS}/${ARCH}..."
 
     TMPDIR=$(mktemp -d)
     cd "$TMPDIR"
 
     if [ "$OS" = "windows" ]; then
-        curl -sL "https://github.com/${REPO}/releases/download/${VERSION}/${BINARY_NAME}_${OS}_${ARCH}.zip" -o release.zip
+        curl -sL "https://github.com/${REPO}/releases/download/v${VERSION}/${BINARY_NAME}_${VERSION}_${OS}_${ARCH}.zip" -o release.zip
         unzip -o release.zip
     else
-        curl -sL "https://github.com/${REPO}/releases/download/${VERSION}/${BINARY_NAME}_${OS}_${ARCH}.tar.gz" -o release.tar.gz
+        curl -sL "https://github.com/${REPO}/releases/download/v${VERSION}/${BINARY_NAME}_${VERSION}_${OS}_${ARCH}.tar.gz" -o release.tar.gz
         tar xzf release.tar.gz
     fi
 
